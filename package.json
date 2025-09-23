@@ -1,0 +1,27 @@
+{
+  "name": "netology-app",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexanderKhabarov-dev/netology-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexanderKhabarov-dev/netology-app/issues"
+  },
+  "homepage": "https://github.com/AlexanderKhabarov-dev/netology-app#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
