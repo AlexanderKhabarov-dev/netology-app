@@ -1,8 +1,16 @@
+import fs from 'fs'
+import path from 'path'
 import multer from 'multer'
 
 export const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, 'public/img')
+    const dir = path.join('public', 'img')
+    
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true })
+    }
+
+    cb(null, dir)
   },
   filename: (_req, file, cb) => {
     cb(null, `${Date.now()} ${file.originalname}`)
