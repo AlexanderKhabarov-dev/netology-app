@@ -1,85 +1,44 @@
 import express from 'express'
-import { v4 as uuidv4 } from 'uuid'
+import multer from 'multer'
+
+import { logger, errors, storage } from './middleware/index.js'
+import { 
+  createBook, 
+  getAllBooks, 
+  getBookFromId, 
+  updateBook, 
+  deleteBook, 
+  uploadFileForBook,
+  downloadBook
+} from './routes/books.js'
+
+import { login } from './routes/user.js'
+
 
 const app = express()
+const upload = multer({ storage })
 
 app.use(express.json())
+app.use(logger)
 
-const mockBook = {
-  id: 'uuidv4-1',
-  title: 'Тестовая книга',
-  description: 'Тестовое описание',
-  authors: 'Я',
-  favorite: 'Я',
-  fileCover: 'фыв',
-  fileName: 'фыв.txt'
-}
+// User
+app.post('/api/user/login', login)
 
-let books = [mockBook]
+// Books
+app.get('/api/books', getAllBooks)
+app.get('/api/books/:id', getBookFromId)
 
-app.post('/api/user/login', (_req, res) => {
-  res.status(201).json({ id: 1, mail: "test@mail.ru" })
-})
+app.put('/api/books/:id', updateBook)
 
-app.get('/api/books', (_req, res) => {
-  res.json(books)
-})
+app.post('/api/books/create', createBook)
+app.post('/api/books/upload/:id', upload.single('file'), uploadFileForBook)
 
-app.get('/api/books/:id', (req, res) => {
-  const book = books.find(b => b.id === req.params.id)
+app.delete('/api/books/:id', deleteBook)
 
-  if (!book) {
-    return res.status(404).send()
-  }
+// Files
+app.get('/api/books/:id/download', downloadBook)
 
-  res.json(book)
-})
-
-app.post('/api/books/create', ({ body }, res) => {
-  const newBook = {
-    id: uuidv4(),
-    title: body?.title ?? '',
-    description: body?.description ?? '',
-    authors: body?.authors ?? '',
-    favorite: body?.favorite ?? '',
-    fileCover: body?.fileCover ?? '',
-    fileName: body?.fileName ?? ''
-  }
-
-  books.push(newBook)
-  res.json(newBook)
-})
-
-app.put('/api/books/:id', ({ body, params }, res) => {
-  const index = books.findIndex(b => b.id === params.id)
-
-  if (index === -1) {
-    return res.status(404).send()
-  }
-
-  books[index] = {
-    ...books[index],
-    title: body?.title ?? books[index].title,
-    description: body?.description ?? books[index].description,
-    authors: body?.authors ?? books[index].authors,
-    favorite: body?.favorite ?? books[index].favorite,
-    fileCover: body?.fileCover ?? books[index].fileCover,
-    fileName: body?.fileName ?? books[index].fileName
-  }
-
-  res.json(books[index])
-})
-
-app.delete('/api/books/:id', (req, res) => {
-  const index = books.findIndex(b => b.id === req.params.id)
-
-  if (index === -1) {
-    return res.status(404).send()
-  }
-
-  books.splice(index, 1)
-  res.send(`Книга: ${req.params.id} - удалена`)
-})
+app.use(errors)
 
 const PORT = 3000
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
