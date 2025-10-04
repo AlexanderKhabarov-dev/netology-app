@@ -4,14 +4,12 @@
       <img src="/assets/book.png" alt="Обложка книги <%= book.title || 'Без названия' %>" class="object-cover w-full h-full" />
     </div>
 
-    <div class="flex-grow">
-      <a href="/books/<%= book.id %>" class="text-lg font-semibold text-gray-900 cursor-pointer hover:text-blue-600">
-        <h3><%= book.title || 'Без названия' %></h3>
-      </a>
+    <a href="/books/<%= book.id %>" class="flex-grow block text-gray-900 hover:text-blue-600 cursor-pointer">
+      <h3 class="text-lg font-semibold mb-1"><%= book.title || 'Без названия' %></h3>
       <p class="text-gray-600"><strong>Автор:</strong> <%= book.authors || 'Нет автора' %></p>
       <p class="text-gray-500 text-sm mb-1"><%= book.description || 'Без описания' %></p>
       <p class="text-gray-400 text-xs"><strong>Файл:</strong> <%= book.fileName || 'Нет файла' %></p>
-    </div>
+    </a>
 
     <% if (book.favorite) { %>
       <a href="#" class="absolute top-2 right-0 mr-2 text-yellow-400 text-2xl select-none cursor-default" title="Избранное">
@@ -19,7 +17,7 @@
       </a>
     <% } %>
 
-    <span data-id="<%= book.id %>" data-file-name="<%= book.fileName %>"class="download-book absolute bottom-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer" title="Скачать" >
+    <span data-id="<%= book.id %>" data-file-name="<%= book.fileName %>" class="download-book absolute bottom-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer" title="Скачать">
       &#128229;
     </span>
   </div>
