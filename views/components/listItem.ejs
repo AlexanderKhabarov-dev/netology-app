@@ -1,0 +1,26 @@
+<li class="border border-gray-300 rounded-lg p-4 shadow-sm transition duration-200 relative">
+  <div class="flex items-center space-x-4">
+    <div class="flex-shrink-0 w-16 h-20 bg-gray-200 rounded overflow-hidden flex items-center justify-center">
+      <img src="/assets/book.png" alt="Обложка книги <%= book.title || 'Без названия' %>" class="object-cover w-full h-full" />
+    </div>
+
+    <div class="flex-grow">
+      <a href="/books/<%= book.id %>" class="text-lg font-semibold text-gray-900 cursor-pointer hover:text-blue-600">
+        <h3><%= book.title || 'Без названия' %></h3>
+      </a>
+      <p class="text-gray-600"><strong>Автор:</strong> <%= book.authors || 'Нет автора' %></p>
+      <p class="text-gray-500 text-sm mb-1"><%= book.description || 'Без описания' %></p>
+      <p class="text-gray-400 text-xs"><strong>Файл:</strong> <%= book.fileName || 'Нет файла' %></p>
+    </div>
+
+    <% if (book.favorite) { %>
+      <a href="#" class="absolute top-2 right-0 mr-2 text-yellow-400 text-2xl select-none cursor-default" title="Избранное">
+        &#9733;
+      </a>
+    <% } %>
+
+    <span data-id="<%= book.id %>" data-file-name="<%= book.fileName %>"class="download-book absolute bottom-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer" title="Скачать" >
+      &#128229;
+    </span>
+  </div>
+</li>

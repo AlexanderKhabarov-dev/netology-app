@@ -1,0 +1,29 @@
+<%- include('./partials/header') %>
+<div class="max-w-[700px] mx-auto p-6 bg-white rounded-lg shadow-md">
+  <!-- Заголовок и кнопка -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-4xl font-bold text-gray-900"><%= book.title %></h1>
+    <a href="/books/update/<%= book.id %>" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition">
+      Редактировать
+    </a>
+  </div>
+
+  <!-- Описание и детали -->
+  <div class="text-gray-700 space-y-4">
+    <p><strong>Автор:</strong> <%= book.authors %></p>
+    <div class="flex items-center">
+      <strong class="mr-2">Описание:</strong>
+      <div class="whitespace-pre-line"><%= book.description %></div>
+    </div>
+    <p>
+      <strong>Избранное:</strong>
+      <% if (book.favorite) { %>
+        <span class="text-yellow-400 text-xl align-middle select-none" title="В избранном">&#9733;</span>
+      <% } else { %>
+        <span class="text-gray-400 text-xl align-middle select-none" title="Не в избранном">&#9733;</span>
+      <% } %>
+    </p>
+    <p><strong>ID книги:</strong> <%= book.id %></p>
+  </div>
+</div>
+<%- include('./partials/footer') %>

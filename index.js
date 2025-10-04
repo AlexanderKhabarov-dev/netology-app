@@ -1,42 +1,28 @@
 import express from 'express'
-import multer from 'multer'
 
-import { logger, errors, storage } from './middleware/index.js'
-import { 
-  createBook, 
-  getAllBooks, 
-  getBookFromId, 
-  updateBook, 
-  deleteBook, 
-  uploadFileForBook,
-  downloadBook
-} from './routes/books.js'
-
-import { login } from './routes/user.js'
-
+import { logger, errors } from './middleware/index.js'
+import booksApiRouter from './routes/api/books.js'
+import userApiRouter from './routes/api/user.js'
+import viewRouter from './routes/views/index.js'
 
 const app = express()
-const upload = multer({ storage })
 
+app.use(express.static('public'))
+app.use(express.urlencoded())
 app.use(express.json())
 app.use(logger)
 
-// User
-app.post('/api/user/login', login)
+// API
+app.use('/api/books', booksApiRouter)
+app.use('/api/user', userApiRouter)
 
-// Books
-app.get('/api/books', getAllBooks)
-app.get('/api/books/:id', getBookFromId)
+app.set("view engine", "ejs")
 
-app.put('/api/books/:id', updateBook)
+// VIEW
+app.use('/', viewRouter)
 
-app.post('/api/books/create', createBook)
-app.post('/api/books/upload/:id', upload.single('file'), uploadFileForBook)
-
-app.delete('/api/books/:id', deleteBook)
-
-// Files
-app.get('/api/books/:id/download', downloadBook)
+// 404
+app.use((_req, res) => res.status(404).render('404', { title: '404 - Страница не найдена' }))
 
 app.use(errors)
 
