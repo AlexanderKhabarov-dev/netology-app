@@ -1,0 +1,19 @@
+version: '1.0'
+services:
+  counter:
+    build: ./viewCounter
+    environment: 
+      - PORT=4000
+    volumes:
+      - ./viewCounter/counters.json:/app/counters.json
+    ports:
+      - "4000:4000"
+  books:
+    build: ./books
+    environment: 
+      - COUNTER_API=http://counter:4000
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - counter

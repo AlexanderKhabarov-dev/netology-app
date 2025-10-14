@@ -8,5 +8,4 @@ router.get('/books/create', renderCreateBookPage)
 router.get('/books/:id', renderViewBookPage)
 router.get('/books/update/:id', renderEditBookPage)
 
-
 export default router

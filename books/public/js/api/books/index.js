@@ -1,4 +1,4 @@
-import { getFile, request } from '../../api/index.js'
+import { getFile, request } from '../index.js'
 
 export const createBook = async (body) => {
   try {

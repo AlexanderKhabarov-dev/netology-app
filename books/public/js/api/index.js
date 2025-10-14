@@ -1,4 +1,4 @@
-export const request = async ({ body, method, url }) => {
+export const request = async ({ body = {}, method, url }) => {
   const params = {
     method,
     credentials: 'same-origin',
