@@ -1,4 +1,4 @@
-## Приложение books
+## Запуск приложения books локально
 
 1. cd books
 2. npm i
@@ -6,7 +6,7 @@
 
 ---
 
-## Приложение viewCounter
+## Запуск приложения viewCounter локально
 
 1. cd viewCounter
 2. npm i
@@ -14,7 +14,7 @@
 
 ---
 
-## Docker
+## запуск Docker
 
 1. docker-compose up
 
