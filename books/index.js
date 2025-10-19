@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import mongoose from 'mongoose'
 
 import { logger, errors } from './middleware/index.js'
 import booksApiRouter from './routes/api/books.js'
@@ -25,9 +26,16 @@ app.set("view engine", "ejs")
 // VIEW
 app.use('/', viewRouter)
 
-// 404
+// ERRORS
 app.use((_req, res) => res.status(404).render('404', { title: '404 - Страница не найдена' }))
-
 app.use(errors)
 
+// START SERVER
 app.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`))
+
+const uri = 'mongodb://root:root@mongo:27017/?authSource=admin'
+
+mongoose.connect(uri).catch(console.error);
+mongoose.connect(uri)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err))

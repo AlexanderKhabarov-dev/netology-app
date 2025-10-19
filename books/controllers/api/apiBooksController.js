@@ -6,8 +6,8 @@ export const getAllBooks = (_req, res) => {
   res.json(books)
 }
 
-export const getBookFromId = (req, res) => {
-  const book = bookRepository.getById(req.params.id)
+export const getBookFromId = async (req, res) => {
+  const book = await bookRepository.getById('68f5111a6b28085a82518341')
 
   if (!book) {
     return res.status(404).send({ errorMessage: 'Книга не найдена' })

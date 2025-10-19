@@ -8,6 +8,8 @@ export const createBook = async (body) => {
       url: `/api/books/create`
     })
 
+    console.log(body)
+
     return data
   } catch(e) {
     alert(e)

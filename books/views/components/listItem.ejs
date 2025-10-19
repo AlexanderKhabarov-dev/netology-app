@@ -4,7 +4,7 @@
       <img src="/assets/book.png" alt="Обложка книги <%= book.title || 'Без названия' %>" class="object-cover w-full h-full" />
     </div>
 
-    <a href="/books/<%= book.id %>" class="flex-grow block text-gray-900 hover:text-blue-600 cursor-pointer">
+    <a href="/books/<%= book._id %>" class="flex-grow block text-gray-900 hover:text-blue-600 cursor-pointer">
       <h3 class="text-lg font-semibold mb-1"><%= book.title || 'Без названия' %></h3>
       <p class="text-gray-600"><strong>Автор:</strong> <%= book.authors || 'Нет автора' %></p>
       <p class="text-gray-500 text-sm mb-1"><%= book.description || 'Без описания' %></p>
@@ -17,7 +17,7 @@
       </a>
     <% } %>
 
-    <span data-id="<%= book.id %>" data-file-name="<%= book.fileName %>" class="download-book absolute bottom-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer" title="Скачать">
+    <span data-id="<%= book._id %>" data-file-name="<%= book.fileName %>" class="download-book absolute bottom-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer" title="Скачать">
       &#128229;
     </span>
   </div>

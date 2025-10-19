@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 VOLUME ["/app"]
 EXPOSE 4000
-CMD ["node", "counter.js"]
+CMD ["node", , "nodemon", "counter.js"]

@@ -1,15 +1,15 @@
 import bookRepository from '../../repositories/booksRepository.js'
 
-export const renderHomePage = (_req, res) => {
-  const books = bookRepository.getAll()
+export const renderHomePage = async (_req, res) => {
+  const books = await bookRepository.getAll() ?? []
 
-  const data = { title: 'Книги', books }
+  const data = { title: 'Книги', books: books }
   res.render('index', data)
 }
 
 export const renderViewBookPage = async (req, res) => {
-  const book = bookRepository.getById(req.params.id)
-  const url = `${process.env.COUNTER_API}/counter/${book.id}`
+  const book = await bookRepository.getById(req.params.id)
+  const url = `${process.env.COUNTER_API}/counter/${book._id}`
 
   const result = await fetch(url, { method: 'GET' })
   const { counter: viewCounter } = await result.json()
@@ -18,8 +18,8 @@ export const renderViewBookPage = async (req, res) => {
   res.render('view', data)
 }
 
-export const renderEditBookPage = (req, res) => {
-  const book = bookRepository.getById(req.params.id)
+export const renderEditBookPage = async (req, res) => {
+  const book = await bookRepository.getById(req.params.id)
 
   const data = { title: 'Редактирование книги', book }
   res.render('update', data)

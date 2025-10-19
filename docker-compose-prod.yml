@@ -4,28 +4,20 @@ services:
     environment: 
       - PORT=4000
     volumes:
-      - ./viewCounter:/app
       - ./viewCounter/counters.json:/app/counters.json
     ports:
       - "4000:4000"
-    depends_on:
-      - mongo
-    command: npx nodemon counter.js
 
   books:
     build: ./books
-    volumes:
-      - ./books:/app 
     environment: 
-      - DB_URI=mongodb://root:root@mongo:27017/
+      - DB_URI=mongodb://root:root@mongo:27017/?authSource=admin
       - COUNTER_API=http://counter:4000
       - PORT=3000
     ports:
       - "3000:3000"
     depends_on:
       - counter
-      - mongo
-    command: npx nodemon index.js
 
   mongo:
     image: mongo
@@ -40,7 +32,7 @@ services:
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
       ME_CONFIG_BASICAUTH_ENABLED: true
       ME_CONFIG_BASICAUTH_USERNAME: mongoexpressuser
       ME_CONFIG_BASICAUTH_PASSWORD: mongoexpresspass
