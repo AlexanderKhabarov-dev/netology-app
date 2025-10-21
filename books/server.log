@@ -2828,3 +2828,10 @@ Tue Oct 21 2025 16:38:59 GMT+0000 (Coordinated Universal Time) GET /
 Tue Oct 21 2025 16:38:59 GMT+0000 (Coordinated Universal Time) GET /.well-known/appspecific/com.chrome.devtools.json
 Tue Oct 21 2025 16:39:02 GMT+0000 (Coordinated Universal Time) GET /
 Tue Oct 21 2025 16:39:02 GMT+0000 (Coordinated Universal Time) GET /.well-known/appspecific/com.chrome.devtools.json
+Tue Oct 21 2025 16:41:45 GMT+0000 (Coordinated Universal Time) GET /books/create
+Tue Oct 21 2025 16:41:45 GMT+0000 (Coordinated Universal Time) GET /.well-known/appspecific/com.chrome.devtools.json
+Tue Oct 21 2025 16:41:56 GMT+0000 (Coordinated Universal Time) POST /api/file/upload
+Tue Oct 21 2025 16:41:56 GMT+0000 (Coordinated Universal Time) POST /api/books/create
+Tue Oct 21 2025 16:41:56 GMT+0000 (Coordinated Universal Time) GET /
+Tue Oct 21 2025 16:41:56 GMT+0000 (Coordinated Universal Time) GET /.well-known/appspecific/com.chrome.devtools.json
+Tue Oct 21 2025 16:41:57 GMT+0000 (Coordinated Universal Time) GET /api/file/68f7b7d43ae3c52a444a7cb6/download
