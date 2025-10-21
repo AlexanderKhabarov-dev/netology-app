@@ -1,4 +1,4 @@
-import bookRepository from '../../repositories/booksRepository.js'
+import bookRepository from '../../repositories/book/booksRepository.js'
 
 export const renderHomePage = async (_req, res) => {
   const books = await bookRepository.getAll() ?? []

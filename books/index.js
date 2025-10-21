@@ -7,6 +7,7 @@ import booksApiRouter from './routes/api/books.js'
 import counterApiRouter from './routes/api/counter.js'
 import userApiRouter from './routes/api/user.js'
 import viewRouter from './routes/views/index.js'
+import fileApiRouter from './routes/api/file.js'
 
 dotenv.config()
 const app = express()
@@ -19,6 +20,7 @@ app.use(logger)
 // API
 app.use('/api/books', booksApiRouter)
 app.use('/api/user', userApiRouter)
+app.use('/api/file', fileApiRouter)
 app.use('/counter', counterApiRouter)
 
 app.set("view engine", "ejs")

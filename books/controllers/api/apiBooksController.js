@@ -1,4 +1,4 @@
-import bookRepository from '../../repositories/booksRepository.js'
+import bookRepository from '../../repositories/book/booksRepository.js'
 
 export const getAllBooks = (_req, res) => {
   const books = bookRepository.getAll()
@@ -16,10 +16,10 @@ export const getBookFromId = async (req, res) => {
   res.json(book)
 }
 
-export const createBook = (req, res) => {
-  bookRepository.create(req.body)
+export const createBook = async (req, res) => {
+  const book = await bookRepository.create(req.body)
 
-  res.json({ redirectUrl: '/' })
+  res.json({ redirectUrl: '/', book })
 }
 
 export const updateBook = (req, res) => {
@@ -40,32 +40,4 @@ export const deleteBook = (req, res) => {
   }
 
   res.send(`Книга с id ${req.params.id} удалена`)
-}
-
-export const uploadFileForBook = (req, res) => {
-  if (!req.file) {
-    return res.status(400).send({ errorMessage: 'Файл не загружен' })
-  }
-
-  const updated = bookRepository.uploadFile(req.params.id, req.file)
-
-  if (!updated) {
-    return res.status(404).send({ errorMessage: 'Книга не найдена' })
-  }
-
-  res.send('Файл успешно загружен')
-}
-
-export const downloadBook = (req, res) => {
-  const filePath = bookRepository.getFilePath(req.params.id)
-
-  if (!filePath) {
-    return res.status(404).send({ errorMessage: 'Книга не найдена' })
-  }
-  
-  res.sendFile(filePath, err => {
-    if (err) {
-      res.status(404).send({ errorMessage: 'Файл не найден' })
-    }
-  })
 }

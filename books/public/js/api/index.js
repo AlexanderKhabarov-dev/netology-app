@@ -42,12 +42,12 @@ export const getFile = async (url) => {
   }
 }
 
-export const uploadFile = async ({ file, url }) => {
+export const uploadFile = async ({ file  }) => {
   const formData = new FormData()
   formData.append('file', file)
 
   try {
-    const request = await fetch(url, {
+    const request = await fetch('/api/file/upload', {
       method: 'POST',
       body: formData,
       credentials: 'same-origin',

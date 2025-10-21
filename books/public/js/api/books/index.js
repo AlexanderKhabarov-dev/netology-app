@@ -8,22 +8,24 @@ export const createBook = async (body) => {
       url: `/api/books/create`
     })
 
-    console.log(body)
-
     return data
   } catch(e) {
     alert(e)
   }
 }
 
-export const handleDownloadBook = async (bookId, fileName) => {
-  const blob = await getFile(`/api/books/${bookId}/download`)
-  const blobUrl = URL.createObjectURL(blob)
+export const handleDownloadBook = async (fileId, fileName) => {
+  if (fileId) {
+    const blob = await getFile(`/api/file/${fileId}/download`)
+    const blobUrl = URL.createObjectURL(blob)
 
-  const link = document.createElement('a')
+    const link = document.createElement('a')
 
-  link.href = blobUrl
-  link.download = fileName
-  link.click()
-  URL.revokeObjectURL(blobUrl)
+    link.href = blobUrl
+    link.download = fileName
+    link.click()
+    URL.revokeObjectURL(blobUrl)
+  } else {
+    alert('Не удалось скачать файл')
+  }
 }
