@@ -10,7 +10,7 @@ services:
       - "4000:4000"
     depends_on:
       - mongo
-    command: npx nodemon counter.js
+    command: npx nodemon --legacy-watch --watch /app --ext js,json counter.js
 
   books:
     build: ./books
@@ -25,7 +25,7 @@ services:
     depends_on:
       - counter
       - mongo
-    command: npx nodemon index.js
+    command: npx nodemon --legacy-watch --watch /app --ext js,json index.js
 
   mongo:
     image: mongo
