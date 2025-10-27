@@ -3,7 +3,7 @@ import { renderCreateBookPage, renderEditBookPage, renderHomePage, renderViewBoo
 
 const router = express.Router()
 
-router.get('/', renderHomePage)
+router.get('/books/homePage', renderHomePage)
 router.get('/books/create', renderCreateBookPage)
 router.get('/books/:id', renderViewBookPage)
 router.get('/books/update/:id', renderEditBookPage)

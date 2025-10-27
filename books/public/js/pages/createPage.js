@@ -11,7 +11,7 @@ const handleCreateBook = async (e) => {
   try {
     const file = document.querySelector('#file').files[0]
     const fileData = await uploadFile({ file })
-    console.log(JSON.stringify(fileData))
+
     const { fileName, id } = fileData
 
     const formResult = getJsonFromFormData(form)
