@@ -4,10 +4,15 @@ import mongoose from 'mongoose'
 import passport from 'passport'
 import session from 'express-session'
 import { Strategy as LocalStrategy } from 'passport-local'
+import MongoStore from 'connect-mongo'
+import http from 'http'
+import { Server } from 'socket.io'
+import sharedsession from 'express-socket.io-session'
 
 import { logger, errors } from './middleware/index.js'
 import booksApiRouter from './routes/api/books.js'
 import counterApiRouter from './routes/api/counter.js'
+import commentsApiRouter from './routes/api/comments.js'
 import userApiRouter from './routes/api/user.js'
 import booksView from './routes/views/books.js'
 import userView from './routes/views/user.js'
@@ -16,40 +21,59 @@ import fileApiRouter from './routes/api/file.js'
 import User from './repositories/user/userSchema.js'
 import { isLoggedIn, redirectFromLoginToHome } from './middleware/isLoggedIn.js'
 import { isLoggedInApi } from './middleware/isLoggedIn.js'
+import { setupCommentsSocketHandlers } from './websockets/comments.js'
 
 dotenv.config()
 const app = express()
+const server = http.Server(app)
+const io = new Server(server)
 
-// SESSION
-app.use(session({
+// #region SESSION
+const expressSession = session({
   secret: '1234_5678_910',   
   resave: false,               
-  saveUninitialized: false 
-}))
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.DB_URI,
+    ttl: 24 * 60 * 60,
+  }),
+  cookie: {
+    maxAge: 3 * 60 * 60 * 1000
+  }
+})
+
+app.use(expressSession)
+io.use(sharedsession(expressSession, {
+  autoSave: true
+}));
 
 app.use(passport.initialize())
 app.use(passport.session())
 
+// #region PRIVATE ROUTES
 app.use('/api/books', isLoggedInApi)
 app.use('/api/file', isLoggedInApi)
+app.use('api/comments', isLoggedInApi)
 app.use('/counter', isLoggedInApi)
+
 app.use('/books', isLoggedIn)
 app.use('/profile', isLoggedIn)
-app.use('/login', redirectFromLoginToHome)
-app.use('/register', redirectFromLoginToHome)
 
-// AUTH
+app.use('/login', redirectFromLoginToHome)
+app.use('/signup', redirectFromLoginToHome)
+
+// #region AUTH
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-// COMMON
+// #region COMMON
 app.use(express.static('public'))
 app.use(express.urlencoded())
 app.use(express.json())
 app.use(logger)
 
-// API
+//#region API ROUTES
 app.get('/', (_req, res) => {
   res.redirect('/books/homePage')
 })
@@ -57,24 +81,25 @@ app.get('/', (_req, res) => {
 app.use('/api/books', booksApiRouter)
 app.use('/api/user', userApiRouter)
 app.use('/api/file', fileApiRouter)
+app.use('/api/comments', commentsApiRouter)
 app.use('/counter', counterApiRouter)
 
+// #region VIEW
 app.set("view engine", "ejs")
 
-// VIEW
 app.use('/', booksView)
 app.use('/', userView)
 
-// ERRORS
+// #region ERRORS
 app.use((_req, res) => res.status(404).render('404', { title: '404 - Страница не найдена' }))
 app.use(errors)
 
-// START SERVER
-app.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`))
+// #region START SERVER
+server.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`))
 
-const uri = 'mongodb://root:root@mongo:27017/?authSource=admin'
-
-mongoose.connect(uri).catch(console.error);
-mongoose.connect(uri)
+mongoose.connect(process.env.DB_URI).catch(console.error);
+mongoose.connect(process.env.DB_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err))
+
+setupCommentsSocketHandlers(io)

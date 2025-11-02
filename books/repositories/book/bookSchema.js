@@ -8,7 +8,7 @@ const bookSchema = new mongoose.Schema({
   authors: { type: String },                           
   favorite: { type: Boolean, default: false },         
   fileCover: { type: String },                         
-  fileName: { type: String }                           
+  fileName: { type: String },
 });
 
 const Book = mongoose.model('Book', bookSchema)

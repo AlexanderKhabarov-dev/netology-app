@@ -7,7 +7,7 @@ export const getAllBooks = (_req, res) => {
 }
 
 export const getBookFromId = async (req, res) => {
-  const book = await bookRepository.getById('68f5111a6b28085a82518341')
+  const book = await bookRepository.getById(req.params.id)
 
   if (!book) {
     return res.status(404).send({ errorMessage: 'Книга не найдена' })
@@ -29,7 +29,7 @@ export const updateBook = (req, res) => {
     return res.status(404).send({ errorMessage: 'Книга не найдена' })
   }
 
-  res.json({ redirectUrl: `/` })
+  res.json({ redirectUrl: `/books/${req.params.id}` })
 }
 
 export const deleteBook = (req, res) => {

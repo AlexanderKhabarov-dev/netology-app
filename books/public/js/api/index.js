@@ -1,4 +1,4 @@
-export const request = async ({ body = {}, method, url }) => {
+export const request = async ({ body = {}, method, url, isHtml }) => {
   const params = {
     method,
     credentials: 'same-origin',
@@ -10,7 +10,14 @@ export const request = async ({ body = {}, method, url }) => {
 
   try {
     const request = await fetch(url, params)
-    const response = await request.json()
+    const response = isHtml ? 
+      await request.text() : 
+      await request.json()
+
+    if(!request.ok) {
+      alert(response)
+      return
+    }
 
     if (response.errorMessage) {
       alert(response.errorMessage)

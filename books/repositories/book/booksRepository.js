@@ -56,8 +56,6 @@ class BookRepository {
 
     return deletedBook
   }
-
- 
 }
 
 export default new BookRepository()

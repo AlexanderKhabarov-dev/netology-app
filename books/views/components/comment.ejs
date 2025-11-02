@@ -1,0 +1,21 @@
+<div class="border border-gray-300 rounded p-3 relative comment" data-id="<%= comment._id %>">
+  <p class="text-sm text-gray-600 mb-1">
+    <strong><%= comment.userName %></strong> - <%= comment.createdAt.toLocaleString() %>
+  </p>
+  <p class="text-gray-800"><%= comment.text %></p>
+  <% if (comment.canDelete) { %>
+    <button 
+      class="
+        deleteComment 
+        absolute 
+        top-2 
+        right-2 
+        text-red-600 
+        hover:text-red-800 
+        font-bold
+      " 
+      data-type="delete" 
+      data-id="<%= comment._id %>"
+      title="Удалить комментарий">X</button>
+  <% } %>
+</div>

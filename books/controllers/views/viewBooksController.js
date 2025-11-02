@@ -1,4 +1,5 @@
 import bookRepository from '../../repositories/book/booksRepository.js'
+import commentsRepository from '../../repositories/comments/commentsRepository.js'
 
 export const renderHomePage = async (_req, res) => {
   const books = await bookRepository.getAll() ?? []
@@ -14,7 +15,20 @@ export const renderViewBookPage = async (req, res) => {
   const result = await fetch(url, { method: 'GET' })
   const { counter: viewCounter } = await result.json()
 
-  const data = { title: book.title, book, viewCounter }
+  const comments = await commentsRepository.getAllCommentsFromBookId(book._id)
+  const commentsWithDeletePermission = 
+    comments.map(item => ({
+      ...item, 
+      canDelete: req.user.id === item.userId
+    }))
+
+  const data = { 
+    title: book.title, 
+    book, 
+    viewCounter, 
+    comments: commentsWithDeletePermission 
+  }
+
   res.render('view', data)
 }
 
