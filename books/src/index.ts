@@ -25,27 +25,29 @@ import { setupCommentsSocketHandlers } from './websockets/comments.js'
 
 dotenv.config()
 const app = express()
-const server = http.Server(app)
+const server = new http.Server(app)
 const io = new Server(server)
 
 // #region SESSION
 const expressSession = session({
-  secret: '1234_5678_910',   
-  resave: false,               
+  secret: '1234_5678_910',
+  resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.DB_URI,
     ttl: 24 * 60 * 60,
   }),
   cookie: {
-    maxAge: 3 * 60 * 60 * 1000
-  }
+    maxAge: 3 * 60 * 60 * 1000,
+  },
 })
 
 app.use(expressSession)
-io.use(sharedsession(expressSession, {
-  autoSave: true
-}));
+io.use(
+  sharedsession(expressSession, {
+    autoSave: true,
+  }),
+)
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -85,21 +87,26 @@ app.use('/api/comments', commentsApiRouter)
 app.use('/counter', counterApiRouter)
 
 // #region VIEW
-app.set("view engine", "ejs")
+app.set('view engine', 'ejs')
 
 app.use('/', booksView)
 app.use('/', userView)
 
 // #region ERRORS
-app.use((_req, res) => res.status(404).render('404', { title: '404 - Страница не найдена' }))
+app.use((_req, res) =>
+  res.status(404).render('404', { title: '404 - Страница не найдена' }),
+)
 app.use(errors)
 
 // #region START SERVER
-server.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`))
+server.listen(process.env.PORT, () =>
+  console.log(`Server started on port ${process.env.PORT}`),
+)
 
-mongoose.connect(process.env.DB_URI).catch(console.error);
-mongoose.connect(process.env.DB_URI)
+mongoose.connect(process?.env?.DB_URI).catch(console.error)
+mongoose
+  .connect(process?.env?.DB_URI)
   .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err))
+  .catch((err) => console.error('MongoDB connection error:', err))
 
 setupCommentsSocketHandlers(io)

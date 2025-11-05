@@ -14,7 +14,9 @@ incrementBookView(bookId)
 // #region Удаление комментария
 const handleRemoveComment = ({ deletedCommentId }) => {
   console.log({ deletedCommentId })
-  const comment = commentsContainer.querySelector(`.comment[data-id="${deletedCommentId}"]`)
+  const comment = commentsContainer.querySelector(
+    `.comment[data-id="${deletedCommentId}"]`,
+  )
   comment.remove()
 }
 
@@ -23,12 +25,10 @@ commentsContainer.addEventListener('click', async (e) => {
   if (type === 'delete') {
     e.preventDefault()
 
-    socket.emit('deleteComment', { commentId: id },
-      (data) => {
-        handleRemoveComment(data)
-        console.log(data)
-      }
-    )
+    socket.emit('deleteComment', { commentId: id }, (data) => {
+      handleRemoveComment(data)
+      console.log(data)
+    })
   }
 })
 
@@ -47,10 +47,11 @@ const handleAddComment = async (e) => {
   e.preventDefault()
   const bookId = document.querySelector('#commentForm').dataset.bookid
 
-  socket.emit('createComment', { bookId, text: inputText.value },
-    ({ html }) => handleInsertHtml(html)
+  socket.emit('createComment', { bookId, text: inputText.value }, ({ html }) =>
+    handleInsertHtml(html),
   )
 }
 
 submitCommentButton.addEventListener('click', handleAddComment)
 socket.on('error', ({ errorMessage }) => alert(errorMessage))
+socket.on('newComment', handleInsertHtml)
