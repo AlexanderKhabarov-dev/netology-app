@@ -7,8 +7,8 @@ export const renderRegisterPage = (_req, res) => {
 }
 
 export const renderUserProfile = async ({ user }, res) => {
-  res.render('profile', { 
-    title: 'Профиль', 
-    username: user?.username ?? 'Нет имени' 
+  res.render('profile', {
+    title: 'Профиль',
+    username: user?.username ?? 'Нет имени',
   })
 }

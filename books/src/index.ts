@@ -8,6 +8,7 @@ import MongoStore from 'connect-mongo'
 import http from 'http'
 import { Server } from 'socket.io'
 import sharedsession from 'express-socket.io-session'
+import { createServer } from 'vite'
 
 import { logger, errors } from './middleware/index.js'
 import booksApiRouter from './routes/api/books.js'
@@ -22,6 +23,11 @@ import User from './repositories/user/userSchema.js'
 import { isLoggedIn, redirectFromLoginToHome } from './middleware/isLoggedIn.js'
 import { isLoggedInApi } from './middleware/isLoggedIn.js'
 import { setupCommentsSocketHandlers } from './websockets/comments.js'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 dotenv.config()
 const app = express()
@@ -46,7 +52,7 @@ app.use(expressSession)
 io.use(
   sharedsession(expressSession, {
     autoSave: true,
-  }),
+  })
 )
 
 app.use(passport.initialize())
@@ -87,26 +93,31 @@ app.use('/api/comments', commentsApiRouter)
 app.use('/counter', counterApiRouter)
 
 // #region VIEW
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 app.use('/', booksView)
 app.use('/', userView)
 
 // #region ERRORS
-app.use((_req, res) =>
-  res.status(404).render('404', { title: '404 - Страница не найдена' }),
-)
+app.use((_req, res) => res.status(404).render('404', { title: '404 - Страница не найдена' }))
 app.use(errors)
 
 // #region START SERVER
-server.listen(process.env.PORT, () =>
-  console.log(`Server started on port ${process.env.PORT}`),
-)
+const viteDevServer = await createServer({
+  server: {
+    middlewareMode: true,
+  },
+  root: 'client',
+  base: '/',
+})
+app.use(viteDevServer.middlewares)
+server.listen(process.env.PORT, () => console.log(`Server started on port ${process.env.PORT}`))
 
 mongoose.connect(process?.env?.DB_URI).catch(console.error)
 mongoose
   .connect(process?.env?.DB_URI)
   .then(() => console.log('MongoDB connected successfully'))
-  .catch((err) => console.error('MongoDB connection error:', err))
+  .catch(err => console.error('MongoDB connection error:', err))
 
 setupCommentsSocketHandlers(io)

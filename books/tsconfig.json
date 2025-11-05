@@ -1,13 +1,23 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "sourceMap": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "nodenext",
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "moduleResolution": "node"
-  }
+    "noFallthroughCasesInSwitch": true
+    
+  },
+  "include": ["src/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "src/public", "dist"] 
 }

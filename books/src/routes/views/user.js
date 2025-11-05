@@ -1,5 +1,9 @@
 import express from 'express'
-import { renderLoginPage, renderRegisterPage, renderUserProfile } from '../../controllers/views/viewLoginController.js'
+import {
+  renderLoginPage,
+  renderRegisterPage,
+  renderUserProfile,
+} from '../../controllers/views/viewLoginController.js'
 
 const router = express.Router()
 
