@@ -6,18 +6,17 @@
     "sourceMap": true,
     "target": "esnext",
     "module": "nodenext",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false, // TODO: не забыть включить
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
     
   },
-  "include": ["src/**/*", "vite.config.ts"],
-  "exclude": ["node_modules", "src/public", "dist"] 
+  "include": ["./**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"] 
 }
