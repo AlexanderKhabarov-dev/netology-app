@@ -11,11 +11,12 @@ services:
       - mongo
     command: npx nodemon --legacy-watch --watch /app --ext js,json counter.js
 
-  books:
-    build: ./books
+  books_server:
+    build: ./books_server
     environment:
       - DB_URI=mongodb://root:root@mongo:27017/
       - COUNTER_API=http://counter:4000
+      - CLIENT_HOST=http://host.docker.internal:3001
       - PORT=3000
     ports:
       - "3000:3000"
@@ -23,6 +24,14 @@ services:
       - counter
       - mongo
     command: node dist/index.js
+
+  books_client:
+    image: nginx:stable-alpine
+    ports:
+      - "3001:80"
+    volumes:
+      - ./books_client/dist:/usr/share/nginx/html:ro
+      - ./books_client/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   mongo:
     image: mongo

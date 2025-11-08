@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "sourceMap": true,
+    "target": "esnext",
+    "module": "nodenext",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "strictNullChecks": false, // TODO: не забыть включить
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+  },
+  "include": ["./**/*", "vite.config.ts", "../eslint.config.mjs"],
+  "exclude": ["dist"] 
+}
