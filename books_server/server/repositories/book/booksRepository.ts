@@ -1,25 +1,29 @@
 import { v4 as uuidv4 } from 'uuid'
-import AbstractBookRepository from './abstractBookRepository.ts'
-import Book from './bookSchema.ts'
-import { BookType, MongooseBookType } from './types.ts'
+import { inject, injectable } from 'inversify'
 
-class BookRepository extends AbstractBookRepository {
-  constructor() {
-    super(Book)
+import { BookType, MongooseBookType } from './types.ts'
+import { Model } from 'mongoose'
+
+@injectable()
+class BooksRepository {
+  private bookModel: Model<MongooseBookType>
+
+  constructor(@inject('BookModel') bookModel: Model<MongooseBookType>) {
+    this.bookModel = bookModel
   }
 
   async getAll(): Promise<MongooseBookType[]> {
-    const books = await Book.find()
+    const books = await this.bookModel.find()
     return books ?? []
   }
 
   async getById(id: string): Promise<MongooseBookType | null> {
-    const book = await Book.findById(id)
+    const book = await this.bookModel.findById(id)
     return book
   }
 
   async create(bookData: BookType): Promise<MongooseBookType> {
-    const newBook = new Book({
+    const newBook = new this.bookModel({
       id: uuidv4(),
       fileId: bookData.fileId,
       title: bookData.title ?? '',
@@ -36,14 +40,14 @@ class BookRepository extends AbstractBookRepository {
   }
 
   async update(id: string, updateData: BookType): Promise<MongooseBookType | null> {
-    const book = await Book.findByIdAndUpdate(id, updateData, { new: true }).exec()
+    const book = await this.bookModel.findByIdAndUpdate(id, updateData, { new: true }).exec()
     return book
   }
 
   async delete(id: string): Promise<MongooseBookType | null> {
-    const deletedBook = await Book.findByIdAndDelete(id).exec()
+    const deletedBook = await this.bookModel.findByIdAndDelete(id).exec()
     return deletedBook
   }
 }
 
-export default new BookRepository()
+export default BooksRepository

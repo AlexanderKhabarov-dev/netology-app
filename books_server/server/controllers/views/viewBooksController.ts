@@ -1,16 +1,22 @@
-import bookRepository from '../../repositories/book/booksRepository.js'
+import { Request, Response } from 'express'
+
+import { container } from '../../container.ts'
+import BooksRepository from '../../repositories/book/BooksRepository.ts'
 import commentsRepository from '../../repositories/comments/commentsRepository.js'
 
-export const renderHomePage = async (_req, res) => {
+const bookRepository = container.get(BooksRepository)
+
+export const renderHomePage = async (_req: Request, res: Response) => {
   const books = (await bookRepository.getAll()) ?? []
 
   const data = { title: 'Книги', books: books }
   res.render('index', data)
 }
 
-export const renderViewBookPage = async (req, res) => {
+export const renderViewBookPage = async (req: Request<{ id: string }>, res: Response) => {
   const book = await bookRepository.getById(req.params.id)
-  const url = `${process.env.COUNTER_API}/counter/${book._id}`
+
+  const url = `${process.env.COUNTER_API}/counter/${book._id.toString()}`
 
   let viewCounter = 0
 
@@ -38,13 +44,13 @@ export const renderViewBookPage = async (req, res) => {
   res.render('view', data)
 }
 
-export const renderEditBookPage = async (req, res) => {
+export const renderEditBookPage = async (req: Request, res: Response) => {
   const book = await bookRepository.getById(req.params.id)
 
   const data = { title: 'Редактирование книги', book }
   res.render('update', data)
 }
 
-export const renderCreateBookPage = (req, res) => {
+export const renderCreateBookPage = (_req: Request, res: Response) => {
   res.render('create', { title: 'Создание книги ' })
 }

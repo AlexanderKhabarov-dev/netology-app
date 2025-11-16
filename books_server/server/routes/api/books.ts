@@ -1,15 +1,14 @@
 import express from 'express'
 
-import { 
-  createBook, 
-  getAllBooks, 
-  getBookFromId, 
-  updateBook, 
-  deleteBook, 
-} from '../../controllers/api/apiBooksController.js'
+import {
+  createBook,
+  getAllBooks,
+  getBookFromId,
+  updateBook,
+  deleteBook,
+} from '../../controllers/api/apiBooksController.ts'
 
 const router = express.Router()
-
 
 router.get('/', getAllBooks)
 router.get('/:id', getBookFromId)
