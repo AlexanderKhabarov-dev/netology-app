@@ -3,7 +3,7 @@ import {
   renderLoginPage,
   renderRegisterPage,
   renderUserProfile,
-} from '../../controllers/views/viewLoginController.js'
+} from '../../controllers/views/viewLoginController.ts'
 
 const router = express.Router()
 

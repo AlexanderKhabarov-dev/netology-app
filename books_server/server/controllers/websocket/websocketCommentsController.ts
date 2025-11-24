@@ -1,23 +1,39 @@
 import ejs from 'ejs'
 import path from 'path'
-import userRepository from '../../repositories/user/userRepository.js';
-import commentsRepository from '../../repositories/comments/commentsRepository.js';
+import { fileURLToPath } from 'url'
 
-async function renderCommentPartial(comment) {
-  const templatePath = path.resolve('views/components/comment.ejs')
+import { container } from '../../container.ts'
+import UserRepository from '../../repositories/user/UserRepository.ts'
+import CommentsRepository from '../../repositories/comments/CommentsRepository.ts'
+import { CommentType } from '../../repositories/comments/types.ts'
+import { CreateCommentPayloadType, DeleteCommentType } from '../../websockets/types.ts'
+import { CommentSocketFn, RenderCommentType } from './types.ts'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const userRepository = container.get(UserRepository)
+const commentsRepository = container.get(CommentsRepository)
+
+const renderCommentPartial = (comment: RenderCommentType) => {
+  const templatePath = path.resolve(__dirname, '../../views/components/comment.ejs')
   return ejs.renderFile(templatePath, { comment })
 }
 
-export const createCommentSocket = async (data, socket, callback) => {
-  const { user, body } = data;
+export const createCommentSocket: CommentSocketFn<CreateCommentPayloadType> = async (
+  data,
+  socket,
+  callback
+) => {
+  const { user, body } = data
 
   const userFull = await userRepository.getUserFromUserName(user.username)
-  const newComment = {
-    userId: userFull._id,
+  const newComment: CommentType = {
+    userId: userFull._id.toString(),
     userName: userFull.username,
     bookId: body.bookId,
-    text: body.text
-  };
+    text: body.text,
+  }
 
   const createdComment = await commentsRepository.createComment(newComment)
 
@@ -27,6 +43,8 @@ export const createCommentSocket = async (data, socket, callback) => {
     createdAt: new Date(createdComment.createdAt),
     text: createdComment.text,
     _id: createdComment._id,
+    userId: userFull._id.toString(),
+    bookId: body.bookId,
   }
 
   const commentForCurrentUserHtml = await renderCommentPartial(commentData)
@@ -41,16 +59,20 @@ export const createCommentSocket = async (data, socket, callback) => {
   socket.broadcast.emit('newComment', commentForOtherUsersHtml)
 }
 
-export const deleteCommentSocket = async (data, socket, callback) => {
+export const deleteCommentSocket: CommentSocketFn<DeleteCommentType> = async (
+  data,
+  socket,
+  callback
+) => {
   const { body, user } = data
   const userFull = await userRepository.getUserFromUserName(user.username)
 
-  const { canDelete } = await commentsRepository.getCommentsPermissionFromUserId({ 
-    commentId: body.commentId, 
-    userId: userFull._id
+  const { canDelete } = await commentsRepository.getCommentsPermissionFromUserId({
+    commentId: body.commentId,
+    userId: userFull._id.toString(),
   })
 
-  if (canDelete) {
+  if (!canDelete) {
     socket.emit('error', { errorMessage: 'Нельзя удалить комментарий' })
     return
   }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import { MongooseCommentType } from './types.ts'
 
-const commentSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema<MongooseCommentType>({
   userId: { type: String, required: true },
   bookId: { type: String, required: true },
   userName: { type: String },

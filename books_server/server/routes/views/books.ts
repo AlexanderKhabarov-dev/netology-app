@@ -4,7 +4,7 @@ import {
   renderEditBookPage,
   renderHomePage,
   renderViewBookPage,
-} from '../../controllers/views/viewBooksController.js'
+} from '../../controllers/views/viewBooksController.ts'
 
 const router = express.Router()
 

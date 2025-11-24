@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { createComment, deleteComment } from '../../controllers/api/apiCommentsController.js'
+import { createComment, deleteComment } from '../../controllers/api/apiCommentsController.ts'
 
 const router = express.Router()
 

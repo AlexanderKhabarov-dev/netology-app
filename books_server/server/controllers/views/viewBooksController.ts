@@ -2,9 +2,10 @@ import { Request, Response } from 'express'
 
 import { container } from '../../container.ts'
 import BooksRepository from '../../repositories/book/BooksRepository.ts'
-import commentsRepository from '../../repositories/comments/commentsRepository.js'
+import CommentsRepository from '../../repositories/comments/CommentsRepository.ts'
 
 const bookRepository = container.get(BooksRepository)
+const commentsRepository = container.get(CommentsRepository)
 
 export const renderHomePage = async (_req: Request, res: Response) => {
   const books = (await bookRepository.getAll()) ?? []
@@ -28,7 +29,7 @@ export const renderViewBookPage = async (req: Request<{ id: string }>, res: Resp
     console.log(e)
   }
 
-  const comments = await commentsRepository.getAllCommentsFromBookId(book._id)
+  const comments = await commentsRepository.getAllCommentsFromBookId(book._id.toString())
   const commentsWithDeletePermission = comments.map(item => ({
     ...item,
     canDelete: req.user.id === item.userId,

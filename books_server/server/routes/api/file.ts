@@ -7,6 +7,7 @@ import { downloadFile, uploadFile } from '../../controllers/api/apiFileControlle
 const router = express.Router()
 const upload = multer({ storage })
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 router.post('/upload', upload.single('file'), uploadFile)
 router.get('/:id/download', downloadFile)
 

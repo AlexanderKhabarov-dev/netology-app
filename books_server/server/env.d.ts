@@ -1,4 +1,16 @@
 import 'express'
+import 'socket.io'
+
+declare module 'socket.io' {
+  interface Handshake {
+    session?: {
+      passport?: {
+        user?: string
+      }
+    }
+  }
+}
+
 declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: 'development' | 'production' | 'test'
@@ -10,7 +22,8 @@ declare namespace NodeJS {
 declare global {
   namespace Express {
     interface User {
-      id: string
+      id?: string
+      username: string
     }
   }
 }

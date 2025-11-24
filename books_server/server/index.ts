@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import passport from 'passport'
 import session from 'express-session'
-import { Strategy as LocalStrategy } from 'passport-local'
 import MongoStore from 'connect-mongo'
 import http from 'node:http'
 import { Server } from 'socket.io'
@@ -19,7 +18,7 @@ import booksView from './routes/views/books.js'
 import userView from './routes/views/user.js'
 import fileApiRouter from './routes/api/file.js'
 
-import User from './repositories/user/userSchema.js'
+import User from './repositories/user/UserSchema.ts'
 import { isLoggedIn, redirectFromLoginToHome } from './middleware/isLoggedIn.js'
 import { isLoggedInApi } from './middleware/isLoggedIn.js'
 import { setupCommentsSocketHandlers } from './websockets/comments.js'
@@ -71,8 +70,10 @@ app.use('/login', redirectFromLoginToHome)
 app.use('/signup', redirectFromLoginToHome)
 
 // #region AUTH
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-passport.use(new LocalStrategy(User.authenticate()))
+passport.use(User.createStrategy())
+
+// TODO: почему-то конфликт типов
+// @ts-ignore
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 

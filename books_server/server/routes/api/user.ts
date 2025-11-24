@@ -5,6 +5,7 @@ import { loginUser, logoutUser, registerUser } from '../../controllers/api/userC
 
 const router = express.Router()
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 router.post('/login', passport.authenticate('local'), loginUser)
 router.post('/signup', registerUser)
 

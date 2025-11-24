@@ -2,10 +2,11 @@ import { v4 as uuidv4 } from 'uuid'
 import { inject, injectable } from 'inversify'
 
 import { BookType, MongooseBookType } from './types.ts'
+import { IBooksRepository } from './IBooksRepository.ts'
 import { Model } from 'mongoose'
 
 @injectable()
-class BooksRepository {
+class BooksRepository implements IBooksRepository {
   private bookModel: Model<MongooseBookType>
 
   constructor(@inject('BookModel') bookModel: Model<MongooseBookType>) {
